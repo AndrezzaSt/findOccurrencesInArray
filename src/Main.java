@@ -5,16 +5,14 @@ public class Main {
         int mid;
 
         while (low <= high) {
-            mid = (low + (high + 1)) / 2;
+            mid = low + (high - low) / 2;
 
             if (arr[mid] == n) {
                 return mid;
             } else if (arr[mid] > n) {
                 high = mid - 1;
-
             } else {
                 low = mid + 1;
-
             }
         }
         return -1;
@@ -48,9 +46,62 @@ public class Main {
         }
         return count;
     }
-    //Time complexity:
+    //countOccurrences Time complexity:
     // K = number of n occurrences in array
     // O(K Log N)
+
+    private static int firstOccurrence(int[] arr, int n) {
+        int low = 0;
+        int high = arr.length - 1;
+        int mid;
+
+        while (low <= high) {
+            mid = low + (high - low) / 2;
+
+            if (arr[mid] == n) {
+                if (mid - 1 >= 0 && arr[mid - 1] == n) {
+                    high = mid - 1;
+                    continue;
+                }
+                return mid;
+            } else if (arr[mid] > n) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return -1;
+    }
+
+    private static int lastOccurrence(int[] arr, int n) {
+        int low = 0;
+        int high = arr.length - 1;
+        int mid;
+
+        while (low <= high) {
+            mid = low + (high - low) / 2;
+
+            if (arr[mid] == n) {
+                if (mid < high && arr[mid + 1] == n) {
+                    low = mid + 1;
+                    continue;
+                }
+                return mid;
+            } else if (arr[mid] > n) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return -1;
+    }
+
+    private static int betterCountOccurrences(int[] arr, int n) {
+        return lastOccurrence(arr, n) - firstOccurrence(arr, n) + 1;
+    }
+    //betterCountOccurrences Time complexity:
+    // O(2 Log N) =
+    // O(Log N)
 
     private static int naiveSolution(int[] arr, int n) {
         int count = 0;
@@ -73,6 +124,8 @@ public class Main {
 
         return count;
     }
+    //naiveSolution Time complexity:
+    // O(N)
 
     public static void main(String[] args) {
         int n = 2;
@@ -85,8 +138,10 @@ public class Main {
 
         int[] array_worse = new int[]{1, 1, 1, 1, 1, 1};
 
+        int[] arr2 = new int[]{1, 2, 3, 4, 5, 6};
 
-        System.out.println("Number of occurrences of " + n + " in array is: " + countOccurrences(arr, n));
 
+        //System.out.println("Number of occurrences of " + n + " in array is: " + countOccurrences(arr, n));
+        System.out.println("Number of occurrences of " + n + " in array is: " + betterCountOccurrences(arr, n));
     }
 }
